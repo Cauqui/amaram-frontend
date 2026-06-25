@@ -1,0 +1,41 @@
+/* --- CSS PROFESIONAL AMARAM --- */
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --accent: #E85D75; /* Hemos usado el color de tu marca */
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f4f7f6;
+  font-family: var(--sans);
+  color: var(--text);
+}
+
+#root {
+  width: 100%; /* Ocupa el 100% del ancho */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tipografía global limpia */
+h1, h2, h3 {
+  font-family: var(--sans);
+  color: var(--text-h);
+}
+
+/* Clases de utilidad para tu Dashboard */
+.container {
+  width: 100%;
+  padding: 20px;
+}
