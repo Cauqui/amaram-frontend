@@ -45,73 +45,79 @@ function Productos() {
   };
 
   const abrirModal = (prod = null) => {
-  setErrores({});
-  if (prod) {
-    setEditandoId(prod.id);
-    // Asignamos explícitamente solo las propiedades necesarias para el formulario
-    setForm({
-      nombre: prod.nombre || '',
-      descripcion: prod.descripcion || '',
-      precio_unitario: prod.precio_unitario || '',
-      stock_disponible: prod.stock_disponible || '',
-      categoria_id: prod.categoria_id || 1,
-      imagen_url: prod.imagen_url || ''
-    });
-    setArchivo(null);
-  } else {
-    setEditandoId(null);
-    setForm({ nombre: '', descripcion: '', precio_unitario: '', stock_disponible: '', categoria_id: 1, imagen_url: '' });
-    setArchivo(null);
-  }
-  setMostrarModal(true);
-};
-
-  const guardarProducto = async (e) => {
-  e.preventDefault();
-  
-  const tieneImagen = archivo || form.imagen_url;
-  if (Object.values(errores).some(err => err !== "") || !form.nombre || !form.precio_unitario || !tieneImagen) {
-    Swal.fire({ icon: 'error', title: 'Formulario incompleto', text: 'Por favor, complete todos los campos obligatorios.', confirmButtonColor: '#E85D75' });
-    return;
-  }
-
-  setCargando(true);
-  const formData = new FormData();
-  formData.append('nombre', form.nombre);
-  formData.append('descripcion', form.descripcion || '');
-  formData.append('precio_unitario', parseFloat(form.precio_unitario) || 0.00);
-  formData.append('stock_disponible', parseInt(form.stock_disponible, 10) || 0);
-  formData.append('categoria_id', parseInt(form.categoria_id, 10) || 1);
-  // Aseguramos el envío del parámetro status para evitar un 'undefined' en la lectura mutacional
-  formData.append('status', form.status || 'Publicado');
-  
-  if (archivo) formData.append('imagen', archivo);
-  if (editandoId && !archivo) formData.append('imagen_url', form.imagen_url);
-
-  const token = sessionStorage.getItem('token');
-  const config = {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      'Authorization': `Bearer ${token}`
+    setErrores({});
+    if (prod) {
+      setEditandoId(prod.id);
+      // Asignamos explícitamente solo las propiedades necesarias para el formulario
+      setForm({
+        nombre: prod.nombre || '',
+        descripcion: prod.descripcion || '',
+        precio_unitario: prod.precio_unitario || '',
+        stock_disponible: prod.stock_disponible || '',
+        categoria_id: prod.categoria_id || 1,
+        imagen_url: prod.imagen_url || ''
+      });
+      setArchivo(null);
+    } else {
+      setEditandoId(null);
+      setForm({ nombre: '', descripcion: '', precio_unitario: '', stock_disponible: '', categoria_id: 1, imagen_url: '' });
+      setArchivo(null);
     }
+    setMostrarModal(true);
   };
 
-  try {
-    editandoId 
-      ? await axios.put(`https://amaram-backend.onrender.com/api/productos/${editandoId}`, formData, config)
-      : await axios.post('https://amaram-backend.onrender.com/api/productos', formData, config);
+  const guardarProducto = async (e) => {
+    e.preventDefault();
 
-    Swal.fire({ icon: 'success', title: '¡Éxito!', text: 'Guardado correctamente.', timer: 1500, showConfirmButton: false });
-    setMostrarModal(false);
-    cargarDatos();
-  } catch (error) { 
-    console.error(error);
-    const apiMensaje = error.response?.data?.mensaje || 'No se pudo guardar el producto correctamente.';
-    Swal.fire({ icon: 'error', title: 'Error', text: apiMensaje }); 
-  } finally { 
-    setCargando(false); 
-  }
-};
+    const tieneImagen = archivo || form.imagen_url;
+    if (Object.values(errores).some(err => err !== "") || !form.nombre || !form.precio_unitario || !tieneImagen) {
+      Swal.fire({ icon: 'error', title: 'Formulario incompleto', text: 'Por favor, complete todos los campos obligatorios.', confirmButtonColor: '#E85D75' });
+      return;
+    }
+
+    setCargando(true);
+    const formData = new FormData();
+
+    // 1️⃣ ORDEN ESTRICTO: Primero los textos planos requeridos para rellenar el req.body
+    formData.append('nombre', form.nombre);
+    formData.append('descripcion', form.descripcion || '');
+    formData.append('precio_unitario', parseFloat(form.precio_unitario) || 0.00);
+    formData.append('stock_disponible', parseInt(form.stock_disponible, 10) || 0);
+    formData.append('categoria_id', parseInt(form.categoria_id, 10) || 1);
+    formData.append('status', form.status || 'Publicado');
+
+    // 2️⃣ LOS BINARIOS AL FINAL: Para que Multer procese el buffer tras mapear el cuerpo de la petición
+    if (archivo) {
+      formData.append('imagen', archivo);
+    }
+    if (editandoId && !archivo) {
+      formData.append('imagen_url', form.imagen_url);
+    }
+
+    const token = sessionStorage.getItem('token');
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
+      }
+    };
+
+    try {
+      editandoId
+        ? await axios.put(`https://amaram-backend.onrender.com/api/productos/${editandoId}`, formData, config)
+        : await axios.post('https://amaram-backend.onrender.com/api/productos', formData, config);
+
+      Swal.fire({ icon: 'success', title: '¡Éxito!', text: 'Guardado correctamente.', timer: 1500, showConfirmButton: false });
+      setMostrarModal(false);
+      cargarDatos();
+    } catch (error) {
+      console.error(error);
+      const apiMensaje = error.response?.data?.mensaje || 'No se pudo guardar el producto correctamente.';
+      Swal.fire({ icon: 'error', title: 'Error', text: apiMensaje });
+    } finally {
+      setCargando(false);
+    }
+  };
 
   const eliminarProducto = async (id) => {
     const result = await Swal.fire({
