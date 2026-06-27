@@ -20,8 +20,8 @@ function Clientes() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setClientes(res.data);
-    } catch (err) { 
-      Swal.fire('Error', 'No se pudieron cargar los clientes', 'error'); 
+    } catch (err) {
+      Swal.fire('Error', 'No se pudieron cargar los clientes', 'error');
     }
   };
 
@@ -46,17 +46,17 @@ function Clientes() {
     e.preventDefault();
 
     if (!editando && !validarPassword(form.password)) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'La contraseña no es segura: debe tener min 6 chars, Mayús, Minús, números y símbolos.',
-          backdrop: true,
-          heightAuto: false, 
-          willOpen: () => {
-            document.querySelector('.swal2-container').style.zIndex = '9999';
-          }
-        });
-        return;
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'La contraseña no es segura: debe tener min 6 chars, Mayús, Minús, números y símbolos.',
+        backdrop: true,
+        heightAuto: false,
+        willOpen: () => {
+          document.querySelector('.swal2-container').style.zIndex = '9999';
+        }
+      });
+      return;
     }
 
     setCargando(true);
@@ -68,27 +68,30 @@ function Clientes() {
         await axios.put(`https://amaram-backend.onrender.com/api/clientes/${editando.uuid}`, form, config);
         Swal.fire('¡Éxito!', 'Cliente actualizado correctamente', 'success');
       } else {
-        await axios.post('https://amaram-backend.onrender.com/api/clientes', form, config);
+        // 🛡️ REESTABLECIMIENTO DE ENDPOINT COMPATIBLE CON EL BACKEND
+        await axios.post('https://amaram-backend.onrender.com/api/clientes/registro', form, config);
         Swal.fire('¡Éxito!', 'Cliente registrado correctamente', 'success');
       }
 
       setMostrarModal(false);
       cargarClientes();
     } catch (err) {
-      Swal.fire('Error', 'Error al guardar el cliente. Verifica el correo.', 'error');
+      // Capturamos el error controlado del backend para mostrar alertas inteligentes
+      const mensajeError = err.response?.data?.error || 'Error al guardar el cliente. Verifica los campos.';
+      Swal.fire('Error', mensajeError, 'error');
     } finally {
       setCargando(false);
     }
   };
 
   const eliminarCliente = async (uuid) => {
-    const res = await Swal.fire({ 
-      title: '¿Estás seguro?', 
+    const res = await Swal.fire({
+      title: '¿Estás seguro?',
       text: "Esta acción no se puede deshacer",
-      icon: 'warning', 
-      showCancelButton: true, 
+      icon: 'warning',
+      showCancelButton: true,
       confirmButtonColor: '#E85D75',
-      confirmButtonText: 'Sí, eliminar' 
+      confirmButtonText: 'Sí, eliminar'
     });
 
     if (res.isConfirmed) {
@@ -99,17 +102,17 @@ function Clientes() {
         });
         cargarClientes();
         Swal.fire('Eliminado', 'Cliente borrado con éxito', 'success');
-      } catch (err) { 
-        Swal.fire('Error', 'No se pudo eliminar', 'error'); 
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo eliminar', 'error');
       }
     }
   };
 
-  const gridFormStyle = { 
-    display: 'grid', 
-    gridTemplateColumns: '1fr 1fr', 
-    gap: '15px', 
-    marginTop: '15px' 
+  const gridFormStyle = {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '15px',
+    marginTop: '15px'
   };
 
   return (
@@ -124,12 +127,12 @@ function Clientes() {
           <form onSubmit={guardarCliente} style={modalContentStyle}>
             <h3 style={{ marginTop: 0 }}>{editando ? '📝 Editar Cliente' : '➕ Nuevo Cliente'}</h3>
             <div style={gridFormStyle}>
-              <input placeholder="Nombre" maxLength="20" value={form.nombre} onChange={e => setForm({...form, nombre: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} style={inputStyle} required />
-              <input placeholder="Apellido" maxLength="20" value={form.apellido} onChange={e => setForm({...form, apellido: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} style={inputStyle} required />
-              <input placeholder={editando ? "Nueva contraseña (opcional)" : "Contraseña"} type="password" value={form.password || ''} onChange={e => setForm({...form, password: e.target.value})} style={inputStyle} required={!editando} />
-              <input placeholder="Email" type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} style={inputStyle} required />
-              <input placeholder="Celular" maxLength="9" value={form.celular} onChange={e => setForm({...form, celular: e.target.value.replace(/\D/g, '')})} style={inputStyle} />
-              <input placeholder="Dirección" maxLength="50" value={form.direccion} onChange={e => setForm({...form, direccion: e.target.value})} style={inputStyle} />
+              <input placeholder="Nombre" maxLength="20" value={form.nombre} onChange={e => setForm({ ...form, nombre: e.target.value.replace(/[^a-zA-Z\s]/g, '') })} style={inputStyle} required />
+              <input placeholder="Apellido" maxLength="20" value={form.apellido} onChange={e => setForm({ ...form, apellido: e.target.value.replace(/[^a-zA-Z\s]/g, '') })} style={inputStyle} required />
+              <input placeholder={editando ? "Nueva contraseña (opcional)" : "Contraseña"} type="password" value={form.password || ''} onChange={e => setForm({ ...form, password: e.target.value })} style={inputStyle} required={!editando} />
+              <input placeholder="Email" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} style={inputStyle} required />
+              <input placeholder="Celular" maxLength="9" value={form.celular} onChange={e => setForm({ ...form, celular: e.target.value.replace(/\D/g, '') })} style={inputStyle} />
+              <input placeholder="Dirección" maxLength="50" value={form.direccion} onChange={e => setForm({ ...form, direccion: e.target.value })} style={inputStyle} />
             </div>
             <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
               <button type="submit" disabled={cargando} style={btnGuardarStyle}>{cargando ? 'Guardando...' : 'Guardar'}</button>

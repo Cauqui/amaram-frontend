@@ -69,7 +69,6 @@ function Productos() {
   const guardarProducto = async (e) => {
   e.preventDefault();
   
-  // Modificamos la validación para que permita editar si ya existe una imagen_url previa
   const tieneImagen = archivo || form.imagen_url;
   if (Object.values(errores).some(err => err !== "") || !form.nombre || !form.precio_unitario || !tieneImagen) {
     Swal.fire({ icon: 'error', title: 'Formulario incompleto', text: 'Por favor, complete todos los campos obligatorios.', confirmButtonColor: '#E85D75' });
@@ -79,12 +78,12 @@ function Productos() {
   setCargando(true);
   const formData = new FormData();
   formData.append('nombre', form.nombre);
-  formData.append('descripcion', form.descripcion.substring(0, 300));
-  
-  // 🛡️ CORRECCIÓN DE TIPADO ESTRICTO: Forzar conversión numérica para evitar colapsos en PostgreSQL (Neon)
+  formData.append('descripcion', form.descripcion || '');
   formData.append('precio_unitario', parseFloat(form.precio_unitario) || 0.00);
   formData.append('stock_disponible', parseInt(form.stock_disponible, 10) || 0);
   formData.append('categoria_id', parseInt(form.categoria_id, 10) || 1);
+  // Aseguramos el envío del parámetro status para evitar un 'undefined' en la lectura mutacional
+  formData.append('status', form.status || 'Publicado');
   
   if (archivo) formData.append('imagen', archivo);
   if (editandoId && !archivo) formData.append('imagen_url', form.imagen_url);
@@ -107,7 +106,8 @@ function Productos() {
     cargarDatos();
   } catch (error) { 
     console.error(error);
-    Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo guardar el producto correctamente.' }); 
+    const apiMensaje = error.response?.data?.mensaje || 'No se pudo guardar el producto correctamente.';
+    Swal.fire({ icon: 'error', title: 'Error', text: apiMensaje }); 
   } finally { 
     setCargando(false); 
   }
