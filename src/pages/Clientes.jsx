@@ -68,7 +68,7 @@ function Clientes() {
         await axios.put(`https://amaram-backend.onrender.com/api/clientes/${editando.uuid}`, form, config);
         Swal.fire('¡Éxito!', 'Cliente actualizado correctamente', 'success');
       } else {
-        await axios.post('https://amaram-backend.onrender.com/api/clientes/registro', form, config);
+        await axios.post('https://amaram-backend.onrender.com/api/clientes', form, config);
         Swal.fire('¡Éxito!', 'Cliente registrado correctamente', 'success');
       }
 

@@ -80,9 +80,11 @@ function Productos() {
   const formData = new FormData();
   formData.append('nombre', form.nombre);
   formData.append('descripcion', form.descripcion.substring(0, 300));
-  formData.append('precio_unitario', form.precio_unitario);
-  formData.append('stock_disponible', form.stock_disponible);
-  formData.append('categoria_id', form.categoria_id);
+  
+  // 🛡️ CORRECCIÓN DE TIPADO ESTRICTO: Forzar conversión numérica para evitar colapsos en PostgreSQL (Neon)
+  formData.append('precio_unitario', parseFloat(form.precio_unitario) || 0.00);
+  formData.append('stock_disponible', parseInt(form.stock_disponible, 10) || 0);
+  formData.append('categoria_id', parseInt(form.categoria_id, 10) || 1);
   
   if (archivo) formData.append('imagen', archivo);
   if (editandoId && !archivo) formData.append('imagen_url', form.imagen_url);
