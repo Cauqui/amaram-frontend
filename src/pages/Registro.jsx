@@ -106,7 +106,7 @@ function Registro() {
 
     try {
       // 🚀 Ahora sí enviamos datos reales e íntegros a tu base de datos
-      await axios.post('http://localhost:3000/api/clientes/registro', {
+      await axios.post('https://amaram-backend.onrender.com/api/clientes/registro', {
         nombre,
         apellido,   // 🌟 Apellido real guardado correctamente
         email,

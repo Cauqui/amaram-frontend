@@ -81,7 +81,7 @@ const CheckoutForm = ({ total, productos, alConfirmarExito, alCancelar }) => {
     };
 
     // LLAMADA A TU SERVIDOR LOCAL
-    const respuesta = await axios.post('http://localhost:3000/api/ventas', payloadBackend, {
+    const respuesta = await axios.post('https://amaram-backend.onrender.com/api/ventas', payloadBackend, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -316,7 +316,7 @@ function Catalogo({ agregarAlCarrito, carritoAbierto, setCarritoAbierto, product
 
   const cargarCatalogo = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/productos');
+      const res = await axios.get('https://amaram-backend.onrender.com/api/productos');
       setProductos(res.data);
     } catch (error) {
       console.error("Error al cargar productos:", error);

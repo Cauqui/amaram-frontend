@@ -6,7 +6,7 @@ function Inicio({ agregarAlCarrito }) {
   const [indice, setIndice] = useState(0);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/productos')
+    axios.get('https://amaram-backend.onrender.com/api/productos')
       .then(res => setProductos(res.data))
       .catch(err => console.error("Error al cargar productos:", err));
   }, []);

@@ -21,7 +21,7 @@ function DashboardCliente() {
         const token = sessionStorage.getItem('token');
         
         // Consumimos el endpoint adaptativo blindado que creamos en el backend
-        const respuesta = await axios.get('http://localhost:3000/api/ventas/historial', {
+        const respuesta = await axios.get('https://amaram-backend.onrender.com/api/ventas/historial', {
           headers: { Authorization: `Bearer ${token}` }
         });
 

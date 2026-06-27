@@ -19,7 +19,7 @@ function Usuarios() {
   const cargarDatos = async () => {
     try {
       const token = sessionStorage.getItem('token');
-      const res = await axios.get('http://localhost:3000/api/usuarios', {
+      const res = await axios.get('https://amaram-backend.onrender.com/api/usuarios', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsuarios(res.data);
@@ -65,10 +65,10 @@ function Usuarios() {
       const dataToSend = editandoId ? { ...form, activo } : form;
       
       if (editandoId) {
-        await axios.put(`http://localhost:3000/api/usuarios/${editandoId}`, dataToSend, config);
+        await axios.put(`https://amaram-backend.onrender.com/api/usuarios/${editandoId}`, dataToSend, config);
         Swal.fire('¡Editado!', 'Usuario actualizado con éxito', 'success');
       } else {
-        await axios.post('http://localhost:3000/api/usuarios', dataToSend, config);
+        await axios.post('https://amaram-backend.onrender.com/api/usuarios', dataToSend, config);
         Swal.fire('¡Guardado!', 'Usuario creado con éxito', 'success');
       }
       setMostrarModal(false);
@@ -94,7 +94,7 @@ function Usuarios() {
     if (result.isConfirmed) {
       try {
         const token = sessionStorage.getItem('token');
-        await axios.delete(`http://localhost:3000/api/usuarios/${id}`, {
+        await axios.delete(`https://amaram-backend.onrender.com/api/usuarios/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         cargarDatos();

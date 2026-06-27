@@ -22,8 +22,8 @@ function Productos() {
   useEffect(() => { cargarDatos(); }, []);
 
   const cargarDatos = async () => {
-    const resProd = await axios.get('http://localhost:3000/api/productos');
-    const resCat = await axios.get('http://localhost:3000/api/categorias');
+    const resProd = await axios.get('https://amaram-backend.onrender.com/api/productos');
+    const resCat = await axios.get('https://amaram-backend.onrender.com/api/categorias');
     setProductos(resProd.data);
     setCategorias(resCat.data);
   };
@@ -97,8 +97,8 @@ function Productos() {
 
   try {
     editandoId 
-      ? await axios.put(`http://localhost:3000/api/productos/${editandoId}`, formData, config)
-      : await axios.post('http://localhost:3000/api/productos', formData, config);
+      ? await axios.put(`https://amaram-backend.onrender.com/api/productos/${editandoId}`, formData, config)
+      : await axios.post('https://amaram-backend.onrender.com/api/productos', formData, config);
 
     Swal.fire({ icon: 'success', title: '¡Éxito!', text: 'Guardado correctamente.', timer: 1500, showConfirmButton: false });
     setMostrarModal(false);
@@ -120,7 +120,7 @@ function Productos() {
     if (result.isConfirmed) {
       try {
         const token = sessionStorage.getItem('token'); // 🔑 Traer token
-        await axios.delete(`http://localhost:3000/api/productos/${id}`, {
+        await axios.delete(`https://amaram-backend.onrender.com/api/productos/${id}`, {
           headers: { 'Authorization': `Bearer ${token}` } // 👈 Pasar token
         });
         Swal.fire('Eliminado', 'Producto borrado.', 'success');

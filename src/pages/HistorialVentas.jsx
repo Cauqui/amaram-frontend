@@ -13,7 +13,7 @@ const HistorialVentas = () => {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         
         // Consumo directo al canal seguro adaptativo de AMARAM
-        const respuesta = await axios.get('http://localhost:3000/api/ventas/historial', {
+        const respuesta = await axios.get('https://amaram-backend.onrender.com/api/ventas/historial', {
           headers: { Authorization: `Bearer ${token}` }
         });
 

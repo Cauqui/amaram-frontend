@@ -94,7 +94,7 @@ function Clientes() {
     if (res.isConfirmed) {
       try {
         const token = sessionStorage.getItem('token');
-        await axios.delete(`http://localhost:3000/api/clientes/${uuid}`, {
+        await axios.delete(`https://amaram-backend.onrender.com/api/clientes/${uuid}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         cargarClientes();

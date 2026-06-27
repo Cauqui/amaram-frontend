@@ -83,7 +83,7 @@ const CheckoutForm = ({ total, productos, alConfirmarExito, alCancelar }) => {
 
     try {
       // Petición al backend seguro
-      const respuesta = await axios.post('http://localhost:3000/api/ventas', payload, {
+      const respuesta = await axios.post('https://amaram-backend.onrender.com/api/ventas', payload, {
         headers: { Authorization: `Bearer ${tokenSession}` }
       });
 

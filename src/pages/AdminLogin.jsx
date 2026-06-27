@@ -11,7 +11,7 @@ function AdminLogin() {
   const manejarLogin = async (e) => {
     e.preventDefault();
     try {
-      const respuesta = await axios.post('http://localhost:3000/api/login', { email, password });
+      const respuesta = await axios.post('https://amaram-backend.onrender.com/api/login', { email, password });
       
       const { token, usuario } = respuesta.data;
       const rol = usuario ? usuario.rol : null;

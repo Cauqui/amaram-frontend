@@ -17,8 +17,8 @@ const Auditoria = () => {
         
         // Llamada al endpoint seguro enviando el módulo seleccionado como query param
         const url = moduloFiltro === 'TODOS' 
-          ? 'http://localhost:3000/api/auditoria' 
-          : `http://localhost:3000/api/auditoria?modulo=${moduloFiltro}`;
+          ? 'https://amaram-backend.onrender.com/api/auditoria' 
+          : `'https://amaram-backend.onrender.com/api/auditoria?modulo=${moduloFiltro}`;
 
         const respuesta = await axios.get(url, {
           headers: { Authorization: `Bearer ${token}` }
