@@ -16,7 +16,7 @@ function Clientes() {
   const cargarClientes = async () => {
     try {
       const token = sessionStorage.getItem('token');
-      const res = await axios.get('http://localhost:3000/api/clientes', {
+      const res = await axios.get('https://amaram-backend.onrender.com/api/clientes', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setClientes(res.data);
@@ -65,10 +65,10 @@ function Clientes() {
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
       if (editando) {
-        await axios.put(`http://localhost:3000/api/clientes/${editando.uuid}`, form, config);
+        await axios.put(`https://amaram-backend.onrender.com/api/clientes/${editando.uuid}`, form, config);
         Swal.fire('¡Éxito!', 'Cliente actualizado correctamente', 'success');
       } else {
-        await axios.post('http://localhost:3000/api/clientes/registro', form, config);
+        await axios.post('https://amaram-backend.onrender.com/api/clientes/registro', form, config);
         Swal.fire('¡Éxito!', 'Cliente registrado correctamente', 'success');
       }
 
